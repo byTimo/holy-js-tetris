@@ -21,6 +21,6 @@ const config = {
     theme
 }
 
-$(".game").css({width: window.innerHeight/2, height: window.innerHeight})
+$(".game").css({width: window.innerHeight/2, height: window.innerHeight - 100})
 
 $('.game').blockrain(config);
