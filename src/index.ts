@@ -1,54 +1,31 @@
-import {PoseDetector} from "../src/PoseDetector";
+import { createCanvasElement, createVideoCapture } from "./utils";
+import { SinglePoseDetector } from "./Detection/SinglePoseDetector";
+import { PoseDetectorBase } from "./Detection/PoseDetectorBase";
+import { VideoDrawwer } from "./Drawing/VideoDrawer";
+import { DrawerBase } from "./Drawing/DrawerBase";
+import { PoseSkeletonDrawer } from "./Drawing/PoseSkeletonDrawer";
+import { ZoneDrawer } from "./Drawing/ZoneDrawer";
 
-const videoWidth = 600;
-const videoHeight = 500;
+let detector: PoseDetectorBase | null = null;
+const resolution = { width: 600, height: 480 };
 
-const createCanvasElement = (): HTMLCanvasElement => {
-    const canvas = document.createElement("canvas")
-    canvas.setAttribute("id", "posenet")
-    canvas.width = videoWidth;
-    canvas.height = videoHeight;
-    return canvas;
-}
-
-const createVideoElement = (): HTMLVideoElement => {
-    const video = document.createElement("video");
-    video.setAttribute("playsinline", "true");
-    video.style.display = "none";
-    video.style.transform = "scale(-1)"
-    return video;
-}
-
-const configureCameraCapture = async(video: HTMLVideoElement): Promise<void> => {
-    video.width = videoWidth;
-    video.height = videoHeight;
-
-    const stream = await navigator.mediaDevices.getUserMedia({
-        'audio': false,
-        'video': {
-            facingMode: 'user',
-            width: videoWidth,
-            height: videoHeight,
-        },
-    });
-    video.srcObject = stream;
-
-    return new Promise((resolve) => {
-        video.onloadedmetadata = () => {
-            video.play();
-            resolve();
-        };
-    });
-}
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const canvas = createCanvasElement();
-    const video  =createVideoElement();
+    const canvas = createCanvasElement(resolution);
+    const video = await createVideoCapture(resolution);
     document.body.appendChild(canvas);
     document.body.appendChild(video);
 
-    await configureCameraCapture(video);
+    detector = new SinglePoseDetector(video);
+    const drawser: DrawerBase[] = [
+        new VideoDrawwer(canvas, video),
+        new PoseSkeletonDrawer(canvas),
+        new ZoneDrawer(canvas)
+    ];
 
-    const detector = new PoseDetector(canvas, video);
+    detector.register(poses => {
+        drawser.forEach(x => x.draw(poses))
+    })
+
     detector.start();
 })
