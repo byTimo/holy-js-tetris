@@ -31,8 +31,7 @@ export class PoseSkeletonDrawer extends DrawerBase {
     private drawKeypoints(keypoints: Keypoints, color: string, scale: number = 1) {
         for (const key of Object.keys(keypoints)) {
             const keypoint = keypoints[key as Part];
-            const { y, x } = keypoint;
-            this.drawPoint(x * scale, y * scale, 3, color);
+            this.drawPoint(keypoint, 3, color);
         }
     }
 }

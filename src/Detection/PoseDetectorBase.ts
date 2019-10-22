@@ -8,7 +8,7 @@ export abstract class PoseDetectorBase extends Emitter<posenet.Pose[]> {
     protected network: posenet.PoseNet | null = null;
     protected enabled: boolean = false;
 
-    constructor(protected video: HTMLVideoElement) {
+    constructor(protected video: HTMLVideoElement, private config: ModelConfig) {
         super();
     }
 
@@ -32,30 +32,12 @@ export abstract class PoseDetectorBase extends Emitter<posenet.Pose[]> {
     }
 
     protected abstract detect: () => Promise<posenet.Pose[]>
-    
+
     protected getNetwork = async (): Promise<posenet.PoseNet> => {
         if (!this.network) {
-            this.network = await this.configurePosenet();
+            this.network = await posenet.load(this.config);
         }
 
         return this.network;
-    }
-
-    private configurePosenet = (): Promise<posenet.PoseNet> => {
-        // const config: ModelConfig = {
-        //     architecture: 'MobileNetV1',
-        //     outputStride: 8,
-        //     inputResolution: 321,
-        //     multiplier: 0.75,
-        // }
-
-        const config: ModelConfig = {
-            architecture: "ResNet50",
-            outputStride: 16,
-            inputResolution: 257,
-            quantBytes: 2
-        }
-
-        return posenet.load(config);
     }
 }
