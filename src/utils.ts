@@ -10,11 +10,13 @@ export const setStyle = (element: HTMLElement, style: Partial<typeof element.sty
 }
 
 
-export const createCanvasElement = ({ width, height }: Resolution): HTMLCanvasElement => {
+export const createCanvasElement = ({ width, height }: Resolution, classes?: string): HTMLCanvasElement => {
     const canvas = document.createElement("canvas")
-    canvas.setAttribute("id", "posenet")
     canvas.width = width
     canvas.height = height;
+    if (classes) {
+        canvas.setAttribute("class", classes)
+    }
     return canvas;
 }
 
@@ -48,4 +50,10 @@ const configureCameraCapture = async (video: HTMLVideoElement): Promise<void> =>
             resolve();
         };
     });
+}
+
+export const createStyle = (content: string): HTMLStyleElement => {
+    const style = document.createElement("style");
+    style.innerHTML = content;
+    return style;
 }

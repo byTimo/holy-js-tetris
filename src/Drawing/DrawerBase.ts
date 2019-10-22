@@ -1,8 +1,8 @@
-import { SkeletonePose } from "../Detection/PoseDetectorBase";
+import { EstimatedPose } from "../Detection/PoseEstimator";
 
 type Point = [number, number];
 
-export abstract class DrawerBase<T = SkeletonePose> {
+export abstract class DrawerBase<T = EstimatedPose> {
     protected readonly ctx: CanvasRenderingContext2D;
 
     constructor(protected readonly canvas: HTMLCanvasElement) {

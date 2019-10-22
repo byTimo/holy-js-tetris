@@ -1,31 +1,26 @@
-import { createCanvasElement, createVideoCapture } from "./utils";
-import { SinglePoseDetector } from "./Detection/SinglePoseDetector";
-import { PoseDetectorBase } from "./Detection/PoseDetectorBase";
-import { VideoDrawwer } from "./Drawing/VideoDrawer";
-import { DrawerBase } from "./Drawing/DrawerBase";
-import { PoseSkeletonDrawer } from "./Drawing/PoseSkeletonDrawer";
-import { ZoneDrawer } from "./Drawing/ZoneDrawer";
+import { createStyle } from "./utils";
+import { Game } from "./Game/Game";
 
-let detector: PoseDetectorBase | null = null;
-const resolution = { width: 600, height: 480 };
+const css = `
+html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background: black;
+}
+body {
+    display: flex;
+    justify-content: center;
+}
+.absolute {
+    position: absolute;
+}
+`;
 
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const canvas = createCanvasElement(resolution);
-    const video = await createVideoCapture(resolution);
-    document.body.appendChild(canvas);
-    document.body.appendChild(video);
-
-    detector = new SinglePoseDetector(video);
-    const drawser: DrawerBase[] = [
-        new VideoDrawwer(canvas, video),
-        new PoseSkeletonDrawer(canvas),
-        new ZoneDrawer(canvas)
-    ];
-
-    detector.register(poses => {
-        drawser.forEach(x => x.draw(poses))
-    })
-
-    detector.start();
+    const style = createStyle(css);
+    document.body.append(style);
+    const game = new Game({ width: 10, height: 16 });
+    game.start();
 })

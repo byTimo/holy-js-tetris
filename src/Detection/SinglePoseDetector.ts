@@ -1,5 +1,4 @@
 import { PoseDetectorBase } from "./PoseDetectorBase";
-import * as posenet from "@tensorflow-models/posenet";
 
 export class SinglePoseDetector extends PoseDetectorBase {
     protected detect = async () => {
@@ -15,17 +14,13 @@ export class SinglePoseDetector extends PoseDetectorBase {
             flipHorizontal: true,
         })];
 
-        const minPoseConfidence = 0.3;
-        const minPartConfidence = 0.5;
+        const minPoseConfidence = 0.1;
+        const minPartConfidence = 0.3;
 
         return poses.filter(pose => pose.score >= minPoseConfidence)
             .map(pose => {
-                const segments = posenet.getAdjacentKeyPoints(pose.keypoints, minPartConfidence)
                 pose.keypoints = pose.keypoints.filter(x => x.score >= minPartConfidence);
-                return {
-                    ...pose,
-                    segments
-                }
+                return pose;
             })
     }
 }

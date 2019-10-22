@@ -1,26 +1,15 @@
 import * as posenet from "@tensorflow-models/posenet";
 import { ModelConfig } from "@tensorflow-models/posenet/dist/posenet_model";
+import { Emitter } from "./Emitter";
 
-export type SkeletonePose = posenet.Pose & {
-    segments: posenet.Keypoint[][];
-}
+export type DetectionHandler = (poses: posenet.Pose) => void;
 
-export type DetectionHandler = (poses: SkeletonePose[]) => void;
-
-export abstract class PoseDetectorBase {
+export abstract class PoseDetectorBase extends Emitter<posenet.Pose[]> {
     protected network: posenet.PoseNet | null = null;
-    private readonly handlers: Set<DetectionHandler> = new Set();
     protected enabled: boolean = false;
 
     constructor(protected video: HTMLVideoElement) {
-    }
-
-    public register = (handler: DetectionHandler) => {
-        this.handlers.add(handler);
-    }
-
-    public unregister = (handler: DetectionHandler) => {
-        this.handlers.delete(handler);
+        super();
     }
 
     public start = () => {
@@ -31,9 +20,7 @@ export abstract class PoseDetectorBase {
     private detectInternal = async () => {
         const poses = await this.detect();
 
-        for (const handle of this.handlers) {
-            handle(poses);
-        }
+        this.emit(poses)
 
         if (this.enabled) {
             requestAnimationFrame(this.detectInternal);
@@ -44,7 +31,7 @@ export abstract class PoseDetectorBase {
         this.enabled = false;
     }
 
-    protected abstract detect: () => Promise<SkeletonePose[]>
+    protected abstract detect: () => Promise<posenet.Pose[]>
     
     protected getNetwork = async (): Promise<posenet.PoseNet> => {
         if (!this.network) {
@@ -55,19 +42,19 @@ export abstract class PoseDetectorBase {
     }
 
     private configurePosenet = (): Promise<posenet.PoseNet> => {
-        const config: ModelConfig = {
-            architecture: 'MobileNetV1',
-            outputStride: 8,
-            inputResolution: 321,
-            multiplier: 0.75,
-        }
-
         // const config: ModelConfig = {
-        //     architecture: "ResNet50",
-        //     outputStride: 16,
-        //     inputResolution: 257,
-        //     quantBytes: 2
+        //     architecture: 'MobileNetV1',
+        //     outputStride: 8,
+        //     inputResolution: 321,
+        //     multiplier: 0.75,
         // }
+
+        const config: ModelConfig = {
+            architecture: "ResNet50",
+            outputStride: 16,
+            inputResolution: 257,
+            quantBytes: 2
+        }
 
         return posenet.load(config);
     }
