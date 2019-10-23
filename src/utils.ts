@@ -5,22 +5,21 @@ export interface Resolution {
 
 export const setStyle = (element: HTMLElement, style: Partial<typeof element.style>): void => {
     for (const key of Object.keys(style) as Array<any>) {
-        (element.style as any)[key] = style[key]
+        (element.style as any)[key] = style[key];
     }
-}
+};
 
-
-export const createCanvasElement = ({ width, height }: Resolution, classes?: string): HTMLCanvasElement => {
-    const canvas = document.createElement("canvas")
-    canvas.width = width
+export const createCanvasElement = ({width, height}: Resolution, classes?: string): HTMLCanvasElement => {
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
     canvas.height = height;
     if (classes) {
-        canvas.setAttribute("class", classes)
+        canvas.setAttribute("class", classes);
     }
     return canvas;
-}
+};
 
-export const createVideoCapture = async ({ width, height }: Resolution): Promise<HTMLVideoElement> => {
+export const createVideoCapture = async ({width, height}: Resolution): Promise<HTMLVideoElement> => {
     const video = document.createElement("video");
     video.width = width;
     video.height = height;
@@ -31,16 +30,16 @@ export const createVideoCapture = async ({ width, height }: Resolution): Promise
     });
     await configureCameraCapture(video);
     return video;
-}
+};
 
 const configureCameraCapture = async (video: HTMLVideoElement): Promise<void> => {
     const stream = await navigator.mediaDevices.getUserMedia({
-        'audio': false,
-        'video': {
-            facingMode: 'user',
+        "audio": false,
+        "video": {
+            facingMode: "user",
             width: video.width,
-            height: video.height,
-        },
+            height: video.height
+        }
     });
     video.srcObject = stream;
 
@@ -50,10 +49,10 @@ const configureCameraCapture = async (video: HTMLVideoElement): Promise<void> =>
             resolve();
         };
     });
-}
+};
 
 export const createStyle = (content: string): HTMLStyleElement => {
     const style = document.createElement("style");
     style.innerHTML = content;
     return style;
-}
+};
