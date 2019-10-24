@@ -3,12 +3,14 @@ import { Drawer } from "./Drawer";
 import { animate } from "./Utils";
 import { createCanvasElement, createVideoCapture } from "../utils";
 import { PoseDetectorBase } from "../Detection/PoseDetectorBase";
-import { SinglePoseDetector } from "../Detection/SinglePoseDetector";
 import { PoseEstimator } from "../Detection/PoseEstimator";
-import { OpacityDrawer } from "../Drawing/OpacityDrawer";
 import { EstimationDrawer } from "../Drawing/EstimationDrawer";
 import { ClearDrawer } from "../Drawing/ClearDrawer";
 import { MultiPoseDetector } from "../Detection/MultiPoseDetector";
+import { HandDetector } from "../Detection/HandDetector";
+import { HandsDrawer } from "../Drawing/HandsDrawer";
+import { VideoDrawwer } from "../Drawing/VideoDrawer";
+import { OpacityDrawer } from "../Drawing/OpacityDrawer";
 
 export interface Config {
     height: number;
@@ -38,14 +40,25 @@ export class Game {
         document.body.append(this.gameCanvas);
         document.body.append(this.detectorCanvas);
         document.body.append(video);
-        this.detector = new MultiPoseDetector(video);
-        this.estimator = new PoseEstimator(this.detector, { deadZoneRadious: 15 });
-        const drawers = [
-            new ClearDrawer(this.detectorCanvas),
-            new EstimationDrawer(this.detectorCanvas)
-        ]
-        this.estimator.register(poses => drawers.forEach(d => d.draw(poses)));
-        this.estimator.start();
+        // this.detector = new MultiPoseDetector(video);
+        // this.estimator = new PoseEstimator(this.detector, { deadZoneRadious: 15 });
+        // const drawers = [
+        //     new ClearDrawer(this.detectorCanvas),
+        //     new EstimationDrawer(this.detectorCanvas)
+        // ]
+        // this.estimator.register(poses => drawers.forEach(d => d.draw(poses)));
+        // this.estimator.start();
+        const clear = new ClearDrawer(this.detectorCanvas);
+        const opacity = new OpacityDrawer(this.detectorCanvas);
+        const videoDrawer = new VideoDrawwer(this.detectorCanvas, video);
+        const hands = new HandsDrawer(this.detectorCanvas, video);
+
+        const detector = new HandDetector(video);
+        detector.register(h => {
+            h.length && hands.append(h)
+        });
+        await detector.detect();
+        hands.start();
 
         // animate(() => {
         //     this.board.drop();

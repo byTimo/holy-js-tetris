@@ -3,6 +3,22 @@ import { EstimatedPose } from "../Detection/PoseEstimator";
 type Point = { x: number, y: number };
 
 export abstract class DrawerBase<T = EstimatedPose> {
+    public static renderPoint = (ctx: CanvasRenderingContext2D, [x, y]: [number, number], r: number, color: string) => {
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, 2 * Math.PI);
+        ctx.fillStyle = color;
+        ctx.fill();
+    }
+
+    public static renderLine = (ctx: CanvasRenderingContext2D, [x1, y1]: [number, number], [x2, y2]: [number, number], w: number, color: string) => {
+        ctx.lineWidth = w;
+        ctx.strokeStyle = color;
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+    }
+
     protected readonly ctx: CanvasRenderingContext2D;
 
     constructor(protected readonly canvas: HTMLCanvasElement) {
