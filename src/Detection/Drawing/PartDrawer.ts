@@ -1,5 +1,5 @@
 import { DrawerBase } from "./DrawerBase";
-import { Part, EstimatedPose } from "../Detection/PoseEstimator";
+import { Part, EstimatedPose } from "../PoseEstimator";
 
 export type Config = Array<{
     parts: Part[],

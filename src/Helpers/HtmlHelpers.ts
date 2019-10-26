@@ -1,15 +1,10 @@
-export interface Resolution {
-    width: number;
-    height: number;
-}
-
 export const setStyle = (element: HTMLElement, style: Partial<typeof element.style>): void => {
     for (const key of Object.keys(style) as Array<any>) {
         (element.style as any)[key] = style[key];
     }
 };
 
-export const createCanvasElement = ({width, height}: Resolution, classes?: string): HTMLCanvasElement => {
+export const createCanvasElement = (width: number, height: number, classes?: string): HTMLCanvasElement => {
     const canvas = document.createElement("canvas");
     canvas.width = width;
     canvas.height = height;
@@ -19,7 +14,7 @@ export const createCanvasElement = ({width, height}: Resolution, classes?: strin
     return canvas;
 };
 
-export const createVideoCapture = async ({width, height}: Resolution): Promise<HTMLVideoElement> => {
+export const createVideoCapture = async (width: number, height: number): Promise<HTMLVideoElement> => {
     const video = document.createElement("video");
     video.width = width;
     video.height = height;

@@ -1,5 +1,5 @@
 import { DrawerBase } from "./DrawerBase";
-import { Hand } from "../Detection/HandDetector";
+import { Hand } from "../HandDetector";
 
 const colors = [
     "red",

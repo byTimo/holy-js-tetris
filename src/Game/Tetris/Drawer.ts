@@ -1,4 +1,4 @@
-import { Point } from "./Utils";
+import { Point } from "../Utils";
 import { Board } from "./Board";
 
 export interface Config {

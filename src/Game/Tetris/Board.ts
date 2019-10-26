@@ -1,5 +1,7 @@
 import { Line, Shape, nextDirection, Arrow, Square, LeftHook, RightHook, RightZag, LeftZag } from "./Shape";
-import { getType, Point, range, toMap, random } from "./Utils";
+import { Point, random } from "../Utils";
+import { range, toMap } from "../../Helpers/ArrayHelpers";
+import { getType } from "../../Helpers/ObjectHelpers";
 
 const shapeTypes = [
     Line,

@@ -1,5 +1,5 @@
-import { createStyle } from "./utils";
-import { Game } from "./Game/Game";
+import { Game } from "./Game/Tetris/Game";
+import { createStyle as createHtmlStyle } from "./Helpers/HtmlHelpers";
 
 const css = `
 html, body {
@@ -19,7 +19,7 @@ body {
 
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const style = createStyle(css);
+    const style = createHtmlStyle(css);
     document.body.append(style);
     const game = new Game({ width: 10, height: 16 });
     game.start();

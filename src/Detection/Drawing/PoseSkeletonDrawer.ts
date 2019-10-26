@@ -1,5 +1,5 @@
 import { DrawerBase } from "./DrawerBase";
-import { EstimatedPose, Keypoints, Part } from "../Detection/PoseEstimator";
+import { EstimatedPose, Keypoints, Part } from "../PoseEstimator";
 
 const colors = [
     "red",

@@ -1,4 +1,4 @@
-import { EstimatedPose } from "../Detection/PoseEstimator";
+import { EstimatedPose } from "../PoseEstimator";
 
 type Point = { x: number, y: number };
 

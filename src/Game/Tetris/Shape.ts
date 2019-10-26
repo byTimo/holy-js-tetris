@@ -1,4 +1,5 @@
-import { Point, range } from "./Utils";
+import { Point } from "../Utils";
+import { range } from "../../Helpers/ArrayHelpers";
 
 export type ShapeDirection = "up" | "right" | "down" | "left";
 

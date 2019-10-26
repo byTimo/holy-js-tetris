@@ -1,5 +1,5 @@
 import { DrawerBase } from "./DrawerBase";
-import { EstimatedPose } from "../Detection/PoseEstimator";
+import { EstimatedPose } from "../PoseEstimator";
 
 const saved: boolean = false
 

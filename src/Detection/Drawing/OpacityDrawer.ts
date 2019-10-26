@@ -1,5 +1,5 @@
 import { DrawerBase } from "./DrawerBase";
-import { EstimatedPose } from "../Detection/PoseEstimator";
+import { EstimatedPose } from "../PoseEstimator";
 
 export class OpacityDrawer extends DrawerBase {
     public draw = (poses: EstimatedPose[]): void => {
