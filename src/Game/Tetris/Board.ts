@@ -1,7 +1,7 @@
 import { Line, Shape, nextDirection, Arrow, Square, LeftHook, RightHook, RightZag, LeftZag } from "./Shape";
-import { Point, random } from "../Utils";
-import { range, toMap } from "../../Helpers/ArrayHelpers";
-import { getType } from "../../Helpers/ObjectHelpers";
+import { Point, MathHelper } from "../../Helpers/MathHelpers";
+import { ArrayHelper } from "../../Helpers/ArrayHelpers";
+import { ObjectHelper } from "../../Helpers/ObjectHelpers";
 
 const shapeTypes = [
     Line,
@@ -39,15 +39,15 @@ export class Board {
     public walls: Map<string, Point>;
 
     constructor(private width: number, private height: number) {
-        const ground = range(0, width + 1).map(x => ({ x, y: height + 1 }));
-        this.ground = toMap(ground, pointToKey);
-        const walls = range(0, height + 1).map(y => ({ x: -1, y })).concat(range(0, height + 1).map(y => ({ x: width, y })));
-        this.walls = toMap(walls, pointToKey);
+        const ground = ArrayHelper.range(0, width + 1).map(x => ({ x, y: height + 1 }));
+        this.ground = ArrayHelper.toMap(ground, pointToKey);
+        const walls = ArrayHelper.range(0, height + 1).map(y => ({ x: -1, y })).concat(ArrayHelper.range(0, height + 1).map(y => ({ x: width, y })));
+        this.walls = ArrayHelper.toMap(walls, pointToKey);
         this.shape = this.nextShape();
     }
 
     public drop = (): Answer => {
-        const type = getType(this.shape);
+        const type = ObjectHelper.getType(this.shape);
         const next = new type(this.shape.x, this.shape.y + 1, this.shape.direction);
 
         if (!this.hasCollision(next, this.filled) && !this.hasCollision(next, this.ground)) {
@@ -77,7 +77,7 @@ export class Board {
 
     public move = (side: "left" | "right") => {
         const dx = side === "left" ? -1 : 1;
-        const type = getType(this.shape);
+        const type = ObjectHelper.getType(this.shape);
         const next = new type(this.shape.x + dx, this.shape.y, this.shape.direction);
         if (!this.hasCollision(next, this.filled) && !this.hasCollision(next, this.walls)) {
             this.shape = next
@@ -86,7 +86,7 @@ export class Board {
 
     public rotate = () => {
         const direction = nextDirection(this.shape.direction)
-        const type = getType(this.shape);
+        const type = ObjectHelper.getType(this.shape);
         const next = new type(this.shape.x, this.shape.y, direction);
         if (!this.hasCollision(next, this.filled) && !this.hasCollision(next, this.walls)) {
             this.shape = next
@@ -94,7 +94,7 @@ export class Board {
     }
 
     private nextShape = (): Shape => {
-        const index = random(0, shapeTypes.length);
+        const index = MathHelper.random(0, shapeTypes.length);
         const type = shapeTypes[index];
         return new type(Math.floor(this.width / 2), 0, "down");
     }
@@ -116,6 +116,6 @@ export class Board {
         const points = Array.from(this.filled.values())
             .filter(p => p.y > max || p.y < min)
             .map(p => p.y < min ? { x: p.x, y: p.y + lines.length } : p);
-        return toMap(points, pointToKey);
+        return ArrayHelper.toMap(points, pointToKey);
     }
 }

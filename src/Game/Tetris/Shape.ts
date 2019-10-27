@@ -1,5 +1,5 @@
-import { Point } from "../Utils";
-import { range } from "../../Helpers/ArrayHelpers";
+import { Point } from "../../Helpers/MathHelpers";
+import { ArrayHelper } from "../../Helpers/ArrayHelpers";
 
 export type ShapeDirection = "up" | "right" | "down" | "left";
 
@@ -51,7 +51,7 @@ export class Line extends Shape {
     }
 
     private static getPoints = (x: number, y: number, direction: ShapeDirection) => {
-        const diffs = direction === "down" || direction === "right" ? range(-1, 4) : range(-2, 4);
+        const diffs = direction === "down" || direction === "right" ? ArrayHelper.range(-1, 4) : ArrayHelper.range(-2, 4);
         return isHorisontal(direction)
             ? diffs.map(dx => ({ x: x + dx, y }))
             : diffs.map(dy => ({ x, y: y + dy }))
@@ -76,7 +76,7 @@ export class Arrow extends Shape {
 
     private static getPoints = (x: number, y: number, direction: ShapeDirection) => {
         const { x: dx, y: dy } = Arrow.pointDiffByDirection[direction];
-        const diffs = range(-1, 3);
+        const diffs = ArrayHelper.range(-1, 3);
         return [
             ...(isHorisontal(direction)
                 ? diffs.map(dy => ({ x, y: y + dy }))
@@ -105,7 +105,7 @@ export class RightHook extends Shape {
 
     private static getPoints = (x: number, y: number, direction: ShapeDirection) => {
         const { x: dx, y: dy } = RightHook.pointDiffByDirection[direction];
-        const diffs = range(-1, 3);
+        const diffs = ArrayHelper.range(-1, 3);
         return [
             ...(isHorisontal(direction)
                 ? diffs.map(dx => ({ x: x + dx, y }))
@@ -134,7 +134,7 @@ export class LeftHook extends Shape {
 
     private static getPoints = (x: number, y: number, direction: ShapeDirection) => {
         const { x: dx, y: dy } = LeftHook.pointDiffByDirection[direction];
-        const diffs = range(-1, 3);
+        const diffs = ArrayHelper.range(-1, 3);
         return [
             ...(isHorisontal(direction)
                 ? diffs.map(dx => ({ x: x + dx, y }))

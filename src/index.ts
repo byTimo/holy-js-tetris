@@ -1,5 +1,5 @@
-import { Game } from "./Game/Tetris/Game";
-import { createStyle as createHtmlStyle } from "./Helpers/HtmlHelpers";
+import { createStyle as createHtmlStyle, HtmlHelper } from "./Helpers/HtmlHelpers";
+import { Game } from "./Game";
 
 const css = `
 html, body {
@@ -21,6 +21,11 @@ body {
 document.addEventListener("DOMContentLoaded", async () => {
     const style = createHtmlStyle(css);
     document.body.append(style);
-    const game = new Game({ width: 10, height: 16 });
+    const canvas = HtmlHelper.createCanvas(window.innerWidth, window.innerHeight);
+    const video = HtmlHelper.createVideo(window.innerWidth, window.innerHeight, { display: "none", transform: "scale(-1)" });
+    HtmlHelper.linkCameraInput(video);
+    document.body.append(video);
+    document.body.append(canvas);
+    const game = new Game(canvas, video);
     game.start();
 })

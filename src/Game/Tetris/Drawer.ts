@@ -1,5 +1,5 @@
-import { Point } from "../Utils";
 import { Board } from "./Board";
+import { Point } from "../../Helpers/MathHelpers";
 
 export interface Config {
     width: number;
