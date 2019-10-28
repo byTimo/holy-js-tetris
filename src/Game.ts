@@ -1,9 +1,7 @@
-import { TestDetector } from "./Hands/TestDetector";
 import { HandControllerProvider } from "./Hands/HandControllerProvider";
 import { AsyncHelper } from "./Helpers/AsyncHelper";
 import { GameContext, GameMiddleware } from "./GameTypes";
 import { GameRenderer } from "./GameRenderer";
-import { MouseDetector } from "./Detection/MouseDetector";
 import { HandDetector } from "./Hands/HandDetector";
 
 const actionDelay = 30;
