@@ -6,7 +6,7 @@ import { AsyncHelper } from "../Helpers/AsyncHelper";
 
 const maxHand = 10;
 let scoreThreshold = 0.7;
-const detectionDelay = 10;
+const detectionDelay = 5;
 
 const pattern = /threshold=([\d\.]+)/;
 
@@ -26,6 +26,8 @@ export class HandDetector implements GameMiddleware {
         if (!this.model) {
             this.model = await handtrack.load({
                 flipHorizontal: true,
+                imageScaleFactor: 0.7,  // reduce input image size for gains in speed.
+                iouThreshold: 0.5,      // ioU threshold for non-max suppression
                 maxNumBoxes: maxHand,
                 scoreThreshold: scoreThreshold
             });
@@ -53,7 +55,7 @@ export class HandDetector implements GameMiddleware {
     handleParamsChanged = (e: HashChangeEvent) => {
         const hash = window.location.hash;
         const match = pattern.exec(hash);
-        if(match){
+        if (match) {
             scoreThreshold = parseFloat(match[1]);
             this.model = null;
         }

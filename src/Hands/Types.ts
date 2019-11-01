@@ -1,5 +1,6 @@
 import { Detection, GameController } from "../GameTypes";
-import { Point, Scale } from "../Helpers/MathHelpers";
+import { Point, Scale, Circle } from "../Helpers/MathHelpers";
+import { Activation } from "../Activation";
 
 export class HandDetection extends Detection {
     start: Point = { x: -1, y: -1 }
@@ -8,22 +9,13 @@ export class HandDetection extends Detection {
 }
 
 export class HandGameController extends GameController {
-    static initialLife = 5;
-    static maxLife = 20;
+    public life = new Activation(5, 20, 15);
 
-    public life: number = HandGameController.initialLife;
-
-    public get isActive () {
-        return this.life >= HandGameController.maxLife;
-    }
-
-    public incrementLife = (): this => {
-        this.life = this.life >= HandGameController.maxLife ? HandGameController.maxLife : this.life + 1;
-        return this;
-    }
-
-    public decrementLife = (): this => {
-        this.life = this.life <= 0 ? 0 : this.life - 1;
-        return this;
+    public get collider(): Circle {
+        return {
+            kind: "circle",
+            center: this.position,
+            radious: 15
+        }
     }
 }

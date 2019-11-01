@@ -20,15 +20,16 @@ export class HandControllerProvider {
             if (!joined) {
                 return [h, ObjectHelper.create(HandGameController, { position: h.position })];
             }
-            joined.incrementLife();
-            return [h, joined.isActive ? joined.setPosition(h.position) : joined]
+            joined.life.inc();
+            return [h, joined.life.active ? joined.setPosition(h.position) : joined]
         });
 
         const joinedMap = ArrayHelper.toMap(aliving, x => x[1]);
         const dying = controllers
             .filter(c => !joinedMap.has(c))
-            .map<[HandDetection | null, HandGameController]>(c => [null, c.decrementLife()])
-            .filter(p => p[1].life > 0);
+            .map(x => {x.life.dec(); return x})
+            .filter(x => x.life.score > 0)
+            .map<[HandDetection | null, HandGameController]>(c => [null, c])
         return aliving.concat(dying);
     }
 

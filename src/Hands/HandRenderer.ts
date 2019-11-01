@@ -6,8 +6,8 @@ export class HandRenderer {
     render = (ctx: CanvasRenderingContext2D, context: GameContext) => {
         for (const controller of context.controllers) {
             if (controller instanceof HandGameController) {
-                const r = controller.life / HandGameController.maxLife * 15;
-                RenderHelper.renderPoint(ctx, controller.position, r, controller.isActive ? "green" : "orange");
+                const r = controller.life.score / controller.life.max * 15;
+                RenderHelper.renderPoint(ctx, controller.position, r, controller.life.active ? "green" : "orange");
             }
         }
 

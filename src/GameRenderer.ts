@@ -1,15 +1,18 @@
 import { GameContext, RenderMiddleware } from "./GameTypes";
 import { HandRenderer } from "./Hands/HandRenderer";
 import { RenderHelper } from "./Helpers/RenderHelper";
+import { PlayLevelRenderer } from "./Game/PlayLevelRenderer";
+import { PlayLevel } from "./Game/PlayLevel";
 
 const renderVideo = true;
 
 export class GameRenderer {
     private readonly ctx: CanvasRenderingContext2D;
     private middlewares: RenderMiddleware[];
-    constructor(private readonly canvas: HTMLCanvasElement, private video: HTMLVideoElement) {
+    constructor(private readonly canvas: HTMLCanvasElement, private video: HTMLVideoElement, level: PlayLevel) {
         this.ctx = canvas.getContext("2d")!;
         this.middlewares = [
+            new PlayLevelRenderer(level),
             new HandRenderer()
         ]
     }

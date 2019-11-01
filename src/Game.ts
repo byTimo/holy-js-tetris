@@ -3,6 +3,8 @@ import { AsyncHelper } from "./Helpers/AsyncHelper";
 import { GameContext, GameMiddleware } from "./GameTypes";
 import { GameRenderer } from "./GameRenderer";
 import { HandDetector } from "./Hands/HandDetector";
+import { HandMouseDetector } from "./Hands/HandMouseDetector";
+import { PlayLevel } from "./Game/PlayLevel";
 
 const actionDelay = 30;
 const renderDelay = 1;
@@ -12,17 +14,21 @@ export class Game {
     private context: GameContext;
     private middleware: GameMiddleware[];
     private renderer: GameRenderer;
+    private level: PlayLevel;
 
     constructor(canvas: HTMLCanvasElement, video: HTMLVideoElement) {
-        this.renderer = new GameRenderer(canvas, video);
+        this.level = new PlayLevel(canvas);
+        this.renderer = new GameRenderer(canvas, video, this.level);
         this.context = {
             canvas,
             controllers: [],
             detection: []
         }
         this.middleware = [
-            new HandDetector(video),
+            new HandMouseDetector(canvas),
+            //new HandDetector(video),
             new HandControllerProvider(),
+            this.level
         ]
     }
 

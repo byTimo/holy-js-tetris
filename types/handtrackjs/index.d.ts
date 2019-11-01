@@ -1,4 +1,6 @@
 declare module "handtrackjs" {
+    import {Tensor, Rank} from "@tensorflow/tfjs";
+
     export interface Prediction {
         bbox: [number, number, number, number];
         class: "hand";
@@ -6,14 +8,14 @@ declare module "handtrackjs" {
     }
 
     export interface Model {
-        detect(element: HTMLImageElement | HTMLVideoElement | HTMLCanvasElement): Promise<Prediction[]>
+        detect(element: HTMLImageElement | HTMLVideoElement | HTMLCanvasElement | Tensor<Rank>): Promise<Prediction[]>
     }
 
     export interface ModelParams {
         flipHorizontal?: boolean;
         imageScaleFactor?: number;
         maxNumBoxes?: number;
-        iouThershold?: number;
+        iouThreshold?: number;
         scoreThreshold?: number;
     }
 
