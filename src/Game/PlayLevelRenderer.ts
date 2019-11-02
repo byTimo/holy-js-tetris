@@ -1,27 +1,26 @@
 import { RenderMiddleware, GameContext } from "../GameTypes";
-import { PlayLevel } from "./PlayLevel";
-import { PissingRag } from "./PissingRag";
+import { PlayLevel } from "./Levels/PlayLevel";
 import { RenderHelper } from "../Helpers/RenderHelper";
 import { CodeLine } from "./CodeLine";
 
 export class PlayLevelRenderer implements RenderMiddleware {
-    constructor(private level: PlayLevel) {
-
-    }
-
     public render(ctx: CanvasRenderingContext2D, context: GameContext) {
-        //RenderHelper.renderRect(ctx, this.level.start, this.level.conveyor.scale, "red");
-        for (const obj of this.level.linkedControllers.values()) {
+        if (!(context.level instanceof PlayLevel)) {
+            return;
+        }
+        const level = context.level;
+
+        for (const obj of level.linkedControllers.values()) {
             if (obj instanceof CodeLine) {
                 this.renderLine(ctx, obj);
             }
         }
 
-        for (const line of this.level.lines) {
+        for (const line of level.lines) {
             this.renderLine(ctx, line);
         }
 
-        for (const saved of this.level.savedLines) {
+        for (const saved of level.savedLines) {
             const { start, scale } = saved.collider;
             const color = saved.line ? "blue" : "orange"
             RenderHelper.renderRect(ctx, start, scale, color);
@@ -30,10 +29,10 @@ export class PlayLevelRenderer implements RenderMiddleware {
             }
         }
 
-        const color = this.level.rag.active ? "red" : "gray";
-        RenderHelper.renderPoint(ctx, this.level.rag.position, 30, color);
+        const color = level.rag.active ? "red" : "gray";
+        RenderHelper.renderPoint(ctx, level.rag.position, 30, color);
 
-        const { start, scale } = this.level.trash.collider;
+        const { start, scale } = level.trash.collider;
         RenderHelper.renderRect(ctx, start, scale, "white");
     }
 
