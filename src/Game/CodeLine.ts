@@ -18,8 +18,4 @@ export class CodeLine extends GameObject {
             scale
         }
     }
-
-    public setPosition(position: Point) {
-        this.position = position;
-    }
 }

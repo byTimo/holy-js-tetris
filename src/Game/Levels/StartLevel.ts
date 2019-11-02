@@ -1,20 +1,7 @@
 import { Level, GameContext } from "../../GameTypes";
-import { Scale, Circle, MathHelper } from "../../Helpers/MathHelpers";
-import { GameObject } from "../GameObject";
-import { Activation } from "../../Activation";
+import { Scale, MathHelper } from "../../Helpers/MathHelpers";
 import { PlayLevel } from "./PlayLevel";
-
-export class Button extends GameObject {
-    public active = new Activation(0, 100, 100);
-
-    public get collider(): Circle {
-        return {
-            kind: "circle",
-            center: this.position,
-            radious: 30
-        }
-    }
-}
+import { Button } from "../Button";
 
 export class StartLevel extends Level {
     public start: Button;

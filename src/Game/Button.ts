@@ -1,14 +1,13 @@
 import { Circle } from "../Helpers/MathHelpers";
-import { Activation } from "../Activation";
 import { GameObject } from "./GameObject";
-
-export class PissingRag extends GameObject {
-    public readonly active = new Activation(0, 50, 50);
+import { Activation } from "../Activation";
+export class Button extends GameObject {
+    public active = new Activation(0, 100, 100);
     public get collider(): Circle {
         return {
             kind: "circle",
             center: this.position,
-            radious: 40
+            radious: 30
         };
     }
 }

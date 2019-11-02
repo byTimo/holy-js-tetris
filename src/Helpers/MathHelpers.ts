@@ -60,6 +60,10 @@ export class MathHelper {
         return { x: start.x + scale.width / 2, y: start.y + scale.height / 2 };
     }
 
+    static start(center: Point, scale: Scale): Point {
+        return { x: center.x - scale.width / 2, y: center.y - scale.height / 2 };
+    }
+
     static distance({ x: x1, y: y1 }: Point, { x: x2, y: y2 }: Point): number {
         const dx = x2 - x1, dy = y2 - y1;
         return Math.sqrt(dx * dx + dy * dy);

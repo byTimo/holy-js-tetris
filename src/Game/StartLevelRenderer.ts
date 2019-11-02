@@ -9,8 +9,8 @@ export class StartLevelRenderer implements RenderMiddleware {
         }
         const {start} = context.level;
 
-        RenderHelper.renderPoint(ctx, start.position, 30, "white", "stroke");
+        RenderHelper.renderStrokeCircle(ctx, start.position, 30, "white");
         const r = start.active.activationPersentage * 30;
-        RenderHelper.renderPoint(ctx, start.position, r, "green");
+        RenderHelper.renderFillCircle(ctx, start.position, r, "green");
     }
 }
