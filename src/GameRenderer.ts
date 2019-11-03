@@ -24,7 +24,7 @@ export class GameRenderer {
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
         if (renderVideo) {
-            RenderHelper.renderVideo(this.ctx, this.video, this.canvas.width);
+            RenderHelper.renderVideo(this.ctx, this.video, this.canvas);
         }
 
         for (const middleware of this.middlewares) {

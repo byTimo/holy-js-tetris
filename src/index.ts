@@ -11,6 +11,7 @@ html, body {
 body {
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 .absolute {
     position: absolute;
@@ -21,7 +22,8 @@ body {
 document.addEventListener("DOMContentLoaded", async () => {
     const style = createHtmlStyle(css);
     document.body.append(style);
-    const canvas = HtmlHelper.createCanvas(window.innerWidth, window.innerHeight);
+    const ratio = window.innerWidth / window.innerHeight;
+    const canvas = HtmlHelper.createCanvas(window.innerWidth - 200, window.innerHeight - 200/ratio);
     const video = HtmlHelper.createVideo(window.innerWidth, window.innerHeight, { display: "none", transform: "scale(-1)" });
     HtmlHelper.linkCameraInput(video);
     document.body.append(video);

@@ -7,6 +7,13 @@ import { PissingRag } from "../Objects/PissingRag";
 import { GameObject } from "../Objects/GameObject";
 import { StartLevel } from "./StartLevel";
 import { TextButton } from "../Objects/TextButton";
+import { Task, Line } from "../../Tasks/Types";
+import { tasks, lines } from "../../Tasks";
+import { Label } from "../Objects/Label";
+
+const littlePartInLine = 5;
+const centerLine = 3;
+const lineWidthMultiplyer = 0.25;
 
 export class PlayLevel extends Level {
     private tries = 3;
@@ -15,17 +22,31 @@ export class PlayLevel extends Level {
     public rag: PissingRag;
     public readonly controlled: Map<GameController, GameObject> = new Map();
     public end: TextButton;
+    public funcTitleLabel: Label;
+    public funcCloseLabel: Label;
+    public task: Task;
+    public taskLines: Line[];
 
     constructor(private scale: Scale) {
         super();
-        this.savedLines = ArrayHelper.range(0, 10).map((x) => new SaveLine({ x: scale.width / 2, y: x * scale.height / 11 + 25 }));
-        this.rag = new PissingRag({ x: scale.width - 50, y: 50 });
-        this.end = new TextButton("3/3", { x: scale.width - 75, y: scale.height - 50 });
+        this.task = tasks["js"][MathHelper.random(0, tasks["js"].length)];
+        this.taskLines = lines["js"];
+        const part = scale.height / (12 * littlePartInLine + 13)
+        const lineScale = { width: scale.width * lineWidthMultiplyer, height: part * littlePartInLine };
+        this.funcTitleLabel = new Label(this.task.title, { x: scale.width / 2, y: part * centerLine + part }, lineScale);
+        this.funcCloseLabel = new Label("}", { x: scale.width / 2, y: scale.height - part - part * (centerLine - 1) }, lineScale)
+        this.savedLines = ArrayHelper.range(1, 10).map((x) => new SaveLine({ x: scale.width / 2, y: part + x * (part + lineScale.height) + centerLine * part }, lineScale));
+        const ragScale = MathHelper.scale(scale, 0.03);
+        this.rag = new PissingRag({ x: scale.width - ragScale.width - 10, y: ragScale.width + 10 }, ragScale);
+        const endScale = MathHelper.scale(scale, 0.1);
+        this.end = new TextButton("3/3", { x: scale.width - endScale.width / 2 - 10, y: scale.height - endScale.height / 2 - 10 }, endScale);
     }
 
     invoke = (context: GameContext): Level => {
         if (this.lines.length === 0 || this.lines[0].position.y > 50) {
-            const line = new CodeLine(this.nextText(), { x: 150, y: 10 });
+            const part = this.scale.height / 12 / 11;
+            const scale = { width: this.scale.width * 0.25, height: part * 5 };
+            const line = new CodeLine(this.nextText(), { x: scale.width / 2 + 10, y: scale.height / 2 }, scale);
             this.lines.unshift(line);
         }
 
@@ -57,6 +78,9 @@ export class PlayLevel extends Level {
             const controller = controllers.find(c => MathHelper.hasCollision(c.collider, x.collider));
             if (controller) {
                 this.controlled.set(controller, x);
+                return false;
+            }
+            if (x.position.y >= this.scale.height) {
                 return false;
             }
             x.active.dec();
@@ -110,7 +134,7 @@ export class PlayLevel extends Level {
         }
     }
 
-    private nextText = (): string => {
-        return "lalka";
+    private nextText = (): Line => {
+        return this.taskLines[MathHelper.random(0, this.taskLines.length)];
     }
 }

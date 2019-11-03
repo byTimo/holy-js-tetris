@@ -7,10 +7,11 @@ export class StartLevelRenderer implements RenderMiddleware {
         if (!(context.level instanceof StartLevel)) {
             return;
         }
-        const {start} = context.level;
+        const { start } = context.level;
+        const { center, radious } = start.collider;
 
-        RenderHelper.renderStrokeCircle(ctx, start.position, 30, "white");
-        const r = start.active.activationPersentage * 30;
+        RenderHelper.renderStrokeCircle(ctx, center, radious, "white");
+        const r = start.active.activationPersentage * radious;
         RenderHelper.renderFillCircle(ctx, start.position, r, "green");
     }
 }

@@ -8,7 +8,7 @@ export class StartLevel extends Level {
 
     constructor(private scale: Scale) {
         super();
-        this.start = new Button(MathHelper.center({ x: 0, y: 0 }, scale));
+        this.start = new Button(MathHelper.center({ x: 0, y: 0 }, scale), MathHelper.scale(scale, 0.025));
     }
 
     invoke = (context: GameContext): Level => {

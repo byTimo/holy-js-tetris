@@ -1,21 +1,20 @@
-import { Point, Rect, Scale } from "../../Helpers/MathHelpers";
+import { Point, Rect, Scale, MathHelper } from "../../Helpers/MathHelpers";
 import { Activation } from "../../Activation";
 import { GameObject } from "./GameObject";
+import { Line as TaskLine } from "../../Tasks/Types";
 
 export class CodeLine extends GameObject {
     public readonly active: Activation = new Activation(0, 100, 10);
-    public inConveyor = true;
 
-    constructor(public readonly text: string, position: Point) {
-        super(position)
+    constructor(public readonly line: TaskLine, position: Point, scale: Scale) {
+        super(position, scale)
     }
 
     public get collider(): Rect {
-        const scale: Scale = { width: 150, height: 20 };
         return {
             kind: "rect",
-            start: { x: this.position.x - scale.width / 2, y: this.position.y - scale.height / 2 },
-            scale
+            start: MathHelper.start(this.position, this.scale),
+            scale: this.scale,
         }
     }
 }

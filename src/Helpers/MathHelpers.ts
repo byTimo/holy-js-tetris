@@ -74,4 +74,8 @@ export class MathHelper {
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min)) + min;
     }
+
+    static scale(scale: Scale, weight: number): Scale {
+        return { width: scale.width * weight, height: scale.height * weight };
+    }
 }

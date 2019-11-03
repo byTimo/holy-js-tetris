@@ -14,6 +14,14 @@ export class PlayLevelRenderer implements RenderMiddleware {
         }
         const level = context.level;
 
+        const { start, scale } = level.funcTitleLabel.collider;
+        RenderHelper.renderStrokeRect(ctx, start, scale, "orange");
+        RenderHelper.renderText(ctx, level.funcTitleLabel.text, level.funcTitleLabel.position, "orange");
+
+        const c = level.funcCloseLabel.collider;
+        RenderHelper.renderStrokeRect(ctx, c.start, c.scale, "orange");
+        RenderHelper.renderText(ctx, level.funcCloseLabel.text, level.funcCloseLabel.position, "orange");
+
         for (const obj of level.controlled.values()) {
             if (obj instanceof CodeLine) {
                 this.renderLine(ctx, obj);
@@ -36,7 +44,7 @@ export class PlayLevelRenderer implements RenderMiddleware {
         const { start, scale } = line.collider;
         const color = "#CA6F1E";
         RenderHelper.renderStrokeRect(ctx, start, scale, color);
-        RenderHelper.renderText(ctx, line.text, line.position, color);
+        RenderHelper.renderText(ctx, line.line.text, line.position, color);
     }
 
     private renderSaved = (ctx: CanvasRenderingContext2D, saved: SaveLine) => {
@@ -44,7 +52,7 @@ export class PlayLevelRenderer implements RenderMiddleware {
         const color = saved.line ? "blue" : "orange"
         RenderHelper.renderStrokeRect(ctx, start, scale, color);
         if (saved.line) {
-            RenderHelper.renderText(ctx, saved.line.text, saved.position, "blue");
+            RenderHelper.renderText(ctx, saved.line.line.text, saved.position, "blue");
         }
     }
 

@@ -1,7 +1,7 @@
 import { GameObject } from "./GameObject";
 import { CodeLine } from "./CodeLine";
 import { Activation } from "../../Activation";
-import { Rect } from "../../Helpers/MathHelpers";
+import { Rect, MathHelper } from "../../Helpers/MathHelpers";
 
 export class SaveLine extends GameObject {
     public line: CodeLine | null = null;
@@ -11,8 +11,8 @@ export class SaveLine extends GameObject {
     public get collider(): Rect {
         return {
             kind: "rect",
-            start: { x: this.position.x - 100, y: this.position.y - 20 },
-            scale: { width: 200, height: 40 }
+            start: MathHelper.start(this.position, this.scale),
+            scale: this.scale
         };
     }
 }

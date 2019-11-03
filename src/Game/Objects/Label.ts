@@ -1,16 +1,18 @@
-import { MathHelper, Rect, Point, Scale } from "../../Helpers/MathHelpers";
 import { GameObject } from "./GameObject";
+import { Rect, Point, MathHelper, Scale } from "../../Helpers/MathHelpers";
 import { Activation } from "../../Activation";
-export class TextButton extends GameObject {
-    public readonly active = new Activation(0, 100, 100);
-    constructor(public readonly text: string, position: Point, scale: Scale) {
+
+export class Label extends GameObject {
+    constructor(public text: string, position: Point, scale: Scale) {
         super(position, scale);
     }
+
+    public readonly active = new Activation(0, 0, 0);
     public get collider(): Rect {
         return {
             kind: "rect",
             start: MathHelper.start(this.position, this.scale),
             scale: this.scale
-        };
+        }
     }
 }

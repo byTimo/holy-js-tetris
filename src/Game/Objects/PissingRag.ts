@@ -8,7 +8,7 @@ export class PissingRag extends GameObject {
         return {
             kind: "circle",
             center: this.position,
-            radious: 40
+            radious: this.scale.width
         };
     }
 }
