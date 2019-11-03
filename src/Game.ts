@@ -25,8 +25,8 @@ export class Game {
             level: new StartLevel(canvas)
         }
         this.middleware = [
-            // new HandMouseDetector(canvas),
-            new HandDetector(video),
+            new HandMouseDetector(canvas),
+            //new HandDetector(video),
             new HandControllerProvider(),
             new LevelMiddleware()
         ]

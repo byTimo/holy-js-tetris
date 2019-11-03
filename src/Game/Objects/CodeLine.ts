@@ -1,12 +1,12 @@
 import { Point, Rect, Scale, MathHelper } from "../../Helpers/MathHelpers";
 import { Activation } from "../../Activation";
 import { GameObject } from "./GameObject";
-import { Line as TaskLine } from "../../Tasks/Types";
+import { CodeTaskLine } from "../../Tasks/Types";
 
 export class CodeLine extends GameObject {
     public readonly active: Activation = new Activation(0, 100, 10);
 
-    constructor(public readonly line: TaskLine, position: Point, scale: Scale) {
+    constructor(public readonly line: CodeTaskLine, position: Point, scale: Scale) {
         super(position, scale)
     }
 

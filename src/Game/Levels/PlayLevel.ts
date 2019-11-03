@@ -1,4 +1,4 @@
-import { GameMiddleware, GameContext, GameController, Level } from "../../GameTypes";
+import { GameContext, GameController, Level } from "../../GameTypes";
 import { MathHelper, Scale } from "../../Helpers/MathHelpers";
 import { CodeLine } from "../Objects/CodeLine";
 import { ArrayHelper } from "../../Helpers/ArrayHelpers";
@@ -7,9 +7,10 @@ import { PissingRag } from "../Objects/PissingRag";
 import { GameObject } from "../Objects/GameObject";
 import { StartLevel } from "./StartLevel";
 import { TextButton } from "../Objects/TextButton";
-import { Task, Line } from "../../Tasks/Types";
-import { tasks, lines } from "../../Tasks";
+import { CodeTask, CodeTaskLine } from "../../Tasks/Types";
+import { tasks } from "../../Tasks";
 import { Label } from "../Objects/Label";
+import { ObjectHelper } from "../../Helpers/ObjectHelpers";
 
 const littlePartInLine = 5;
 const centerLine = 3;
@@ -24,13 +25,13 @@ export class PlayLevel extends Level {
     public end: TextButton;
     public funcTitleLabel: Label;
     public funcCloseLabel: Label;
-    public task: Task;
-    public taskLines: Line[];
+    public task: CodeTask;
+
+    private taskLines: CodeTaskLine[] = [];
 
     constructor(private scale: Scale) {
         super();
         this.task = tasks["js"][MathHelper.random(0, tasks["js"].length)];
-        this.taskLines = lines["js"];
         const part = scale.height / (12 * littlePartInLine + 13)
         const lineScale = { width: scale.width * lineWidthMultiplyer, height: part * littlePartInLine };
         this.funcTitleLabel = new Label(this.task.title, { x: scale.width / 2, y: part * centerLine + part }, lineScale);
@@ -43,6 +44,16 @@ export class PlayLevel extends Level {
     }
 
     invoke = (context: GameContext): Level => {
+        if (this.end.active.active) {
+            const result = this.tryExcuteTask();
+            if (result) {
+                return new StartLevel(this.scale);
+            } else {
+                this.end.active.drop();
+            }
+        }
+
+
         if (this.lines.length === 0 || this.lines[0].position.y > 50) {
             const part = this.scale.height / 12 / 11;
             const scale = { width: this.scale.width * 0.25, height: part * 5 };
@@ -57,7 +68,27 @@ export class PlayLevel extends Level {
         this.processRag(freeControllers);
         this.processEnd(freeControllers);
 
-        return this.end.active.active ? new StartLevel(this.scale) : this;
+        return this;
+    }
+
+    private tryExcuteTask = (): boolean => {
+        const codes = this.savedLines.filter(x => x.line != null).map(x => x.line!.line.code);
+        const code = [this.task.header, ...codes, "}"].join("\n");
+        try {
+            eval(code);
+            var func: Function = (window as any).func;
+            if (!func) {
+                throw new Error("No func")
+            };
+            const actualResult = func.apply(null, this.task.args);
+            return ObjectHelper.isEquals(actualResult, this.task.result);
+
+        } catch (e) {
+            this.tries--;
+            const endScale = MathHelper.scale(this.scale, 0.1);
+            this.end = new TextButton(`${this.tries}/3`, { x: this.scale.width - endScale.width / 2 - 10, y: this.scale.height - endScale.height / 2 - 10 }, endScale)
+            return false;
+        }
     }
 
     private processControlledObjects = () => {
@@ -75,24 +106,30 @@ export class PlayLevel extends Level {
 
     private processCodeLine = (controllers: GameController[]) => {
         this.lines = this.lines.filter(x => {
-            const controller = controllers.find(c => MathHelper.hasCollision(c.collider, x.collider));
-            if (controller) {
-                this.controlled.set(controller, x);
-                return false;
-            }
             if (x.position.y >= this.scale.height) {
                 return false;
             }
-            x.active.dec();
-            x.position = { x: x.position.x, y: x.position.y + 0.5 };
-            return true;
+            const controller = controllers.find(c => MathHelper.hasCollision(c.collider, x.collider));
+            if (controller) {
+                if (x.active.inc()) {
+                    this.controlled.set(controller, x);
+                    return false;
+                } else {
+                    x.position = { x: x.position.x, y: x.position.y + 1 };
+                    return true;
+                }
+            } else {
+                x.active.dec();
+                x.position = { x: x.position.x, y: x.position.y + 1 };
+                return true;
+            }
         })
     }
 
     private processSaveLine = () => {
         const controlled = Array.from(this.controlled.entries());
         for (const save of this.savedLines.filter(x => x.line == null)) {
-            const pair = controlled.find(([c, l]) => MathHelper.hasCollision(l.collider, save.collider));
+            const pair = controlled.find(([c, l]) => MathHelper.hasCollision(c.collider, save.collider));
             if (pair && pair[1] instanceof CodeLine) {
                 if (save.active.inc()) {
                     save.line = pair[1]
@@ -134,7 +171,10 @@ export class PlayLevel extends Level {
         }
     }
 
-    private nextText = (): Line => {
-        return this.taskLines[MathHelper.random(0, this.taskLines.length)];
+    private nextText = (): CodeTaskLine => {
+        if (this.taskLines.length === 0) {
+            this.taskLines = ArrayHelper.shuffle(this.task.lines);
+        }
+        return this.taskLines.pop()!;
     }
 }

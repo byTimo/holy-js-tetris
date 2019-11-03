@@ -1,6 +1,21 @@
 export type TypeOf<T> = { new(...args: any): T };
 
 export class ObjectHelper {
+    static isEquals(a: any, b: any): boolean {
+        if (Array.isArray(a)) {
+            if (!Array.isArray(b) || a.length !== b.length) {
+                return false;
+            }
+            for (var i = 0; i < a.length; i++) {
+                if (a[i] !== b[i]) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return a === b;
+    }
+
     static getType<T extends object>(instance: T): TypeOf<T> {
         return instance.constructor as TypeOf<T>;
     }

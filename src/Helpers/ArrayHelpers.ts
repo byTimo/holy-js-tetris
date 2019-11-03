@@ -23,4 +23,8 @@ export class ArrayHelper {
         }
         return source.reduce((a, c) => numberSelector(c) < numberSelector(a) ? c : a);
     }
+
+    static shuffle<TValue>(source: TValue[]): TValue[] {
+        return [...source].sort(() => Math.random() - 0.5);
+    }
 }

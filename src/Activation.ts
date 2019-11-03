@@ -24,4 +24,8 @@ export class Activation {
         this._score = this._score <= 0 ? 0 : this._score - 1;
         return this.active;
     };
+
+    public drop = () => {
+        this._score = 0;
+    }
 }

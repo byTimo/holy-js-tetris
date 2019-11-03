@@ -1,13 +1,8 @@
-import { Task, Line } from "./Types";
-import { jsTask } from "./Tasks";
-import { jsLine } from "./JsLines";
+import { CodeTask, CodeTaskLine } from "./Types";
+import { jsTask } from "./JsTasks";
 
 export type Languages = "js";
 
-export const tasks: { [T in Languages]: Task[] } = {
+export const tasks: { [T in Languages]: CodeTask[] } = {
     "js": jsTask
-}
-
-export const lines: { [T in Languages]: Line[] } = {
-    "js": jsLine
 }
