@@ -1,7 +1,7 @@
-import { Rect, Point } from "../Helpers/MathHelpers";
-import { CodeLine } from "./CodeLine";
-import { Activation } from "../Activation";
 import { GameObject } from "./GameObject";
+import { CodeLine } from "./CodeLine";
+import { Activation } from "../../Activation";
+import { Rect } from "../../Helpers/MathHelpers";
 
 export class SaveLine extends GameObject {
     public line: CodeLine | null = null;

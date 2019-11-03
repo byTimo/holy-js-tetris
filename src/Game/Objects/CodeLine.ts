@@ -1,5 +1,5 @@
-import { Point, Rect, Scale } from "../Helpers/MathHelpers";
-import { Activation } from "../Activation";
+import { Point, Rect, Scale } from "../../Helpers/MathHelpers";
+import { Activation } from "../../Activation";
 import { GameObject } from "./GameObject";
 
 export class CodeLine extends GameObject {

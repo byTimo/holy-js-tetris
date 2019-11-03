@@ -17,8 +17,8 @@ export class HandRenderer {
                 const green = 255*detection.score;
                 const c = `rgb(${red}, ${green}, 0)`;
                 RenderHelper.renderFillCircle(ctx, detection.position, 2, c);
-                RenderHelper.renderStrokeRect(ctx, detection.start, detection.scale, c);
-                RenderHelper.renderText(ctx, detection.score.toString(), detection.start, c, 50);
+                // RenderHelper.renderStrokeRect(ctx, detection.start, detection.scale, c);
+                // RenderHelper.renderText(ctx, detection.score.toString(), detection.start, c, 50);
             }
         }
     }

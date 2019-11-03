@@ -34,8 +34,15 @@ export class RenderHelper {
     }
 
     static renderText(ctx: CanvasRenderingContext2D, text: string, { x, y }: Point, color: string, scale: number = 16) {
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
         ctx.font = `${scale}px arial`;
         ctx.fillStyle = color;
         ctx.fillText(text, x, y);
+    }
+
+    static setShadow(ctx: CanvasRenderingContext2D, color: string, blur: number) {
+        ctx.shadowBlur = blur;
+        ctx.shadowColor = color;
     }
 }

@@ -1,7 +1,7 @@
 import { Level, GameContext } from "../../GameTypes";
 import { Scale, MathHelper } from "../../Helpers/MathHelpers";
 import { PlayLevel } from "./PlayLevel";
-import { Button } from "../Button";
+import { Button } from "../Objects/Button";
 
 export class StartLevel extends Level {
     public start: Button;

@@ -1,29 +1,12 @@
 import { GameMiddleware, GameContext, GameController, Level } from "../../GameTypes";
-import { MathHelper, Scale, Rect, Point } from "../../Helpers/MathHelpers";
-import { CodeLine } from "../CodeLine";
+import { MathHelper, Scale } from "../../Helpers/MathHelpers";
+import { CodeLine } from "../Objects/CodeLine";
 import { ArrayHelper } from "../../Helpers/ArrayHelpers";
-import { SaveLine } from "../SaveLine";
-import { PissingRag } from "../PissingRag";
-import { GameObject } from "../GameObject";
-import { Activation } from "../../Activation";
+import { SaveLine } from "../Objects/SaveLine";
+import { PissingRag } from "../Objects/PissingRag";
+import { GameObject } from "../Objects/GameObject";
 import { StartLevel } from "./StartLevel";
-
-export class TextButton extends GameObject {
-    public readonly active = new Activation(0, 100, 100);
-
-    constructor(public readonly text: string, position: Point) {
-        super(position);
-    }
-
-    public get collider(): Rect {
-        const scale = { width: 100, height: 50 };
-        return {
-            kind: "rect",
-            start: MathHelper.start(this.position, scale),
-            scale
-        }
-    }
-}
+import { TextButton } from "../Objects/TextButton";
 
 export class PlayLevel extends Level {
     private tries = 3;

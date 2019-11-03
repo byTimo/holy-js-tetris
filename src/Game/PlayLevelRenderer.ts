@@ -1,9 +1,11 @@
 import { RenderMiddleware, GameContext } from "../GameTypes";
-import { PlayLevel, TextButton } from "./Levels/PlayLevel";
+import { PlayLevel } from "./Levels/PlayLevel";
+import { TextButton } from "./Objects/TextButton";
 import { RenderHelper } from "../Helpers/RenderHelper";
-import { CodeLine } from "./CodeLine";
+import { CodeLine } from "./Objects/CodeLine";
 import { MathHelper } from "../Helpers/MathHelpers";
-import { PissingRag } from "./PissingRag";
+import { PissingRag } from "./Objects/PissingRag";
+import { SaveLine } from "./Objects/SaveLine";
 
 export class PlayLevelRenderer implements RenderMiddleware {
     public render(ctx: CanvasRenderingContext2D, context: GameContext) {
@@ -23,12 +25,7 @@ export class PlayLevelRenderer implements RenderMiddleware {
         }
 
         for (const saved of level.savedLines) {
-            const { start, scale } = saved.collider;
-            const color = saved.line ? "blue" : "orange"
-            RenderHelper.renderStrokeRect(ctx, start, scale, color);
-            if (saved.line) {
-                RenderHelper.renderText(ctx, saved.line.text, start, "blue");
-            }
+            this.renderSaved(ctx, saved);
         }
 
         this.renderRag(ctx, level.rag);
@@ -36,11 +33,19 @@ export class PlayLevelRenderer implements RenderMiddleware {
     }
 
     private renderLine = (ctx: CanvasRenderingContext2D, line: CodeLine) => {
-        const g = line.active.score / line.active.max * 255;
-        const color = `rgb(0,${g},0)`;
         const { start, scale } = line.collider;
+        const color = "#CA6F1E";
         RenderHelper.renderStrokeRect(ctx, start, scale, color);
-        RenderHelper.renderText(ctx, line.text, start, color);
+        RenderHelper.renderText(ctx, line.text, line.position, color);
+    }
+
+    private renderSaved = (ctx: CanvasRenderingContext2D, saved: SaveLine) => {
+        const { start, scale } = saved.collider;
+        const color = saved.line ? "blue" : "orange"
+        RenderHelper.renderStrokeRect(ctx, start, scale, color);
+        if (saved.line) {
+            RenderHelper.renderText(ctx, saved.line.text, saved.position, "blue");
+        }
     }
 
     private renderRag = (ctx: CanvasRenderingContext2D, rag: PissingRag) => {

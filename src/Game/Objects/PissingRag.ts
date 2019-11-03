@@ -1,5 +1,5 @@
-import { Circle } from "../Helpers/MathHelpers";
-import { Activation } from "../Activation";
+import { Circle } from "../../Helpers/MathHelpers";
+import { Activation } from "../../Activation";
 import { GameObject } from "./GameObject";
 
 export class PissingRag extends GameObject {
