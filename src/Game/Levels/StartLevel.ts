@@ -12,12 +12,11 @@ export class StartLevel extends Level {
     }
 
     invoke = (context: GameContext): Level => {
-        for (const controller of context.controllers) {
-            if (MathHelper.hasCollision(controller.collider, this.start.collider)) {
-                this.start.active.inc();
-            } else {
-                this.start.active.dec();
-            }
+        const controller = context.controllers.find(x => MathHelper.hasCollision(x.collider, this.start.collider))
+        if (controller) {
+            this.start.active.inc();
+        } else {
+            this.start.active.dec();
         }
 
         return this.start.active.active ? new PlayLevel(this.scale) : this;
