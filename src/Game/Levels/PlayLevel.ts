@@ -108,7 +108,7 @@ export class PlayLevel extends Level {
                 obj.active.inc();
                 obj.position = controller.position;
             } else {
-                if (!obj.active.dec()) {
+                if (!obj.active.dec() && obj.active.empty) {
                     this.controlled.delete(controller);
                 }
             }

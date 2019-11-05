@@ -7,6 +7,7 @@ import { MathHelper } from "../Helpers/MathHelpers";
 import { PissingRag } from "./Objects/PissingRag";
 import { SaveLine } from "./Objects/SaveLine";
 import { TaskSummary } from "./Objects/TaskSummary";
+import { ColorHelper } from "../Helpers/ColorHelper";
 
 const playChar = "\u25B6";
 
@@ -18,12 +19,12 @@ export class PlayLevelRenderer implements RenderMiddleware {
         const level = context.level;
 
         const { start, scale } = level.funcTitleLabel.collider;
-        RenderHelper.renderStrokeRect(ctx, start, scale, "orange");
-        RenderHelper.renderText(ctx, level.funcTitleLabel.text, level.funcTitleLabel.position, "orange");
+        RenderHelper.renderFillRect(ctx, start, scale, "#fee851")
+        RenderHelper.renderText(ctx, level.funcTitleLabel.text, level.funcTitleLabel.position, "black");
 
         const c = level.funcCloseLabel.collider;
-        RenderHelper.renderStrokeRect(ctx, c.start, c.scale, "orange");
-        RenderHelper.renderText(ctx, level.funcCloseLabel.text, level.funcCloseLabel.position, "orange");
+        RenderHelper.renderFillRect(ctx, c.start, c.scale, "#fee851");
+        RenderHelper.renderText(ctx, level.funcCloseLabel.text, level.funcCloseLabel.position, "black");
 
         for (const obj of level.controlled.values()) {
             if (obj instanceof CodeLine) {
@@ -45,36 +46,48 @@ export class PlayLevelRenderer implements RenderMiddleware {
     }
 
     private renderLine = (ctx: CanvasRenderingContext2D, line: CodeLine) => {
+        const color = ColorHelper.linear([26, 87, 143], [29, 162, 220], line.active.maxPersentage);
         const { start, scale } = line.collider;
-        const color = "#CA6F1E";
-        RenderHelper.renderStrokeRect(ctx, start, scale, color);
-        RenderHelper.renderText(ctx, line.line.text, line.position, color);
+        RenderHelper.withShadow(() => {
+            RenderHelper.renderFillRect(ctx, start, scale, color);
+            RenderHelper.renderText(ctx, line.line.text, line.position, "black");
+        }, ctx, color, 15 * line.active.maxPersentage)
     }
 
     private renderSaved = (ctx: CanvasRenderingContext2D, saved: SaveLine) => {
         const { start, scale } = saved.collider;
-        const color = saved.line ? "blue" : "orange"
-        RenderHelper.renderStrokeRect(ctx, start, scale, color);
         if (saved.line) {
-            RenderHelper.renderText(ctx, saved.line.line.text, saved.position, "blue");
+            RenderHelper.renderFillRect(ctx, start, scale, "#fee851")
+            RenderHelper.renderText(ctx, saved.line.line.text, saved.position, "black");
+        } else {
+            const color = ColorHelper.linear([240, 81, 35], [254, 232, 81], saved.active.activationPersentage)
+            RenderHelper.withShadow(() => {
+                RenderHelper.renderStrokeRect(ctx, start, scale, color);
+            }, ctx, color, 10 * saved.active.activationPersentage);
         }
     }
 
     private renderRag = (ctx: CanvasRenderingContext2D, rag: PissingRag) => {
         const { center, radious } = rag.collider;
-        RenderHelper.renderFillCircle(ctx, center, radious, "gray");
+        RenderHelper.withShadow(() => {
+            RenderHelper.renderFillCircle(ctx, center, radious - 3, "#828282");
+        }, ctx, "#828282", 5);
         const activeRadious = rag.active.activationPersentage * radious;
-        RenderHelper.renderFillCircle(ctx, center, activeRadious, "red");
+        RenderHelper.withShadow(() => {
+            RenderHelper.renderFillCircle(ctx, center, activeRadious > 3 ? activeRadious - 3 : 0, "#ee2524");
+        }, ctx, "#ee2524", 10);
     }
 
     private renderEnd = (ctx: CanvasRenderingContext2D, end: TextButton) => {
         const { start, scale } = end.collider;
-        RenderHelper.renderStrokeRect(ctx, start, scale, "green");
+        RenderHelper.renderStrokeRect(ctx, start, scale, "#828282");
         const weight = end.active.activationPersentage;
         const innerScale = { width: weight * scale.width, height: weight * scale.height };
         const innerStart = MathHelper.start(end.position, innerScale);
-        RenderHelper.renderFillRect(ctx, innerStart, innerScale, "green");
-        RenderHelper.renderText(ctx, `${playChar} tries: ${end.text}`, end.position, "white")
+        RenderHelper.withShadow(() => {
+            RenderHelper.renderFillRect(ctx, innerStart, innerScale, "green");
+            RenderHelper.renderText(ctx, `${playChar} tries: ${end.text}`, end.position, "white")
+        }, ctx, "green", 10);
     }
 
     private renderTaskSummary = (ctx: CanvasRenderingContext2D, summary: TaskSummary) => {

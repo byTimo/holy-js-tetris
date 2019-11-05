@@ -11,6 +11,9 @@ export class Activation {
     public get active() {
         return this._score >= this.activation;
     }
+    public get empty() {
+        return this._score === 0;
+    }
     public get activationPersentage(): number {
         return this._score / this.activation;
     }

@@ -4,7 +4,7 @@ import { GameObject } from "./GameObject";
 import { CodeTaskLine } from "../../Tasks/Types";
 
 export class CodeLine extends GameObject {
-    public readonly active: Activation = new Activation(0, 100, 10);
+    public readonly active: Activation = new Activation(0, 40, 25);
 
     constructor(public readonly line: CodeTaskLine, position: Point, scale: Scale) {
         super(position, scale)

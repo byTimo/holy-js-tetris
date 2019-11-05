@@ -35,8 +35,10 @@ export class ResultLevelRenderer implements RenderMiddleware {
 
         const { center, radious } = button.collider;
 
-        RenderHelper.renderStrokeCircle(ctx, center, radious, "white");
-        const r = button.active.activationPersentage * radious;
-        RenderHelper.renderFillCircle(ctx, button.position, r, "green");
+        RenderHelper.renderStrokeCircle(ctx, center, radious, "#828282");
+        RenderHelper.withShadow(() => {
+            const r = button.active.activationPersentage * radious;
+            RenderHelper.renderFillCircle(ctx, button.position, r, "green");
+        }, ctx, "green", 15);
     }
 }

@@ -43,8 +43,10 @@ export class RenderHelper {
         ctx.fillText(text, x, y);
     }
 
-    static setShadow(ctx: CanvasRenderingContext2D, color: string, blur: number) {
+    static withShadow(action: () => void, ctx: CanvasRenderingContext2D, color: string, blur: number) {
         ctx.shadowBlur = blur;
         ctx.shadowColor = color;
+        action();
+        ctx.shadowBlur = 0;
     }
 }
