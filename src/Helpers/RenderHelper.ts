@@ -35,10 +35,10 @@ export class RenderHelper {
         ctx.strokeRect(x, y, width, height);
     }
 
-    static renderText(ctx: CanvasRenderingContext2D, text: string, { x, y }: Point, color: string, scale: number = 16) {
-        ctx.textAlign = "center";
+    static renderText(ctx: CanvasRenderingContext2D, text: string, { x, y }: Point, color: string, scale: number = 16, align: CanvasTextAlign = "center") {
+        ctx.textAlign = align;
         ctx.textBaseline = "middle";
-        ctx.font = `${scale}px arial`;
+        ctx.font = `${scale}px consolas`;
         ctx.fillStyle = color;
         ctx.fillText(text, x, y);
     }

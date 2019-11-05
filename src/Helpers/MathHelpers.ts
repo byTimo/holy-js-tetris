@@ -20,7 +20,11 @@ export interface Circle {
     radious: number;
 }
 
-export type Figure = Rect | Circle;
+export interface Empty {
+    kind: "empty";
+}
+
+export type Figure = Rect | Circle | Empty;
 
 export class MathHelper {
     static hasCollision(a: Figure, b: Figure): boolean {
@@ -29,6 +33,8 @@ export class MathHelper {
                 return MathHelper.hasCollisionWithCircle(a, b);
             case "rect":
                 return MathHelper.hasCollisionWithRect(a, b);
+            case "empty":
+                return false;
         }
     }
 
@@ -43,6 +49,8 @@ export class MathHelper {
                 const y = a.start.y > b.center.y ? a.start.y : a.start.y + a.scale.height < b.center.y ? a.start.y + a.scale.height : b.center.y;
                 const distance = MathHelper.distance(b.center, { x, y });
                 return distance <= b.radious;
+            case "empty":
+                return false;
         }
     }
 
@@ -53,6 +61,8 @@ export class MathHelper {
             case "circle":
                 const distance = MathHelper.distance(a.center, b.center);
                 return distance <= a.radious + b.radious;
+            case "empty":
+                return false;
         }
     }
 

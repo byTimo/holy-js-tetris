@@ -11,6 +11,7 @@ import { CodeTask, CodeTaskLine } from "../../Tasks/Types";
 import { tasks } from "../../Tasks";
 import { Label } from "../Objects/Label";
 import { ObjectHelper } from "../../Helpers/ObjectHelpers";
+import { TaskSummary } from "../Objects/TaskSummary";
 
 const littlePartInLine = 5;
 const centerLine = 3;
@@ -26,6 +27,7 @@ export class PlayLevel extends Level {
     public funcTitleLabel: Label;
     public funcCloseLabel: Label;
     public task: CodeTask;
+    public taskSummary: TaskSummary;
 
     private taskLines: CodeTaskLine[] = [];
 
@@ -41,15 +43,18 @@ export class PlayLevel extends Level {
         this.rag = new PissingRag({ x: scale.width - ragScale.width - 10, y: ragScale.width + 10 }, ragScale);
         const endScale = MathHelper.scale(scale, 0.1);
         this.end = new TextButton("3/3", { x: scale.width - endScale.width / 2 - 10, y: scale.height - endScale.height / 2 - 10 }, endScale);
+        const taskSummaryScale = { width: scale.width * 0.1, height: scale.height * 0.2 };
+        this.taskSummary = new TaskSummary(this.task, { x: scale.width - taskSummaryScale.width / 2 - 10, y: scale.height - 20 - endScale.height - taskSummaryScale.height / 2 }, taskSummaryScale);
     }
 
     invoke = (context: GameContext): Level => {
         if (this.end.active.active) {
-            const result = this.tryExcuteTask();
-            if (result) {
+            const [end, result] = this.tryExcuteTask();
+            if (end) {
                 return new StartLevel(this.scale);
             } else {
                 this.end.active.drop();
+                this.taskSummary.lastResult = result;
             }
         }
 
@@ -71,7 +76,7 @@ export class PlayLevel extends Level {
         return this;
     }
 
-    private tryExcuteTask = (): boolean => {
+    private tryExcuteTask = (): [boolean, any] => {
         const codes = this.savedLines.filter(x => x.line != null).map(x => x.line!.line.code);
         const code = [this.task.header, ...codes, "}"].join("\n");
         try {
@@ -81,13 +86,13 @@ export class PlayLevel extends Level {
                 throw new Error("No func")
             };
             const actualResult = func.apply(null, this.task.args);
-            return ObjectHelper.isEquals(actualResult, this.task.result);
+            return [ObjectHelper.isEquals(actualResult, this.task.result), actualResult];
 
         } catch (e) {
             this.tries--;
             const endScale = MathHelper.scale(this.scale, 0.1);
             this.end = new TextButton(`${this.tries}/3`, { x: this.scale.width - endScale.width / 2 - 10, y: this.scale.height - endScale.height / 2 - 10 }, endScale)
-            return false;
+            return [false, "error"];
         }
     }
 

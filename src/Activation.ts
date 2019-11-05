@@ -1,4 +1,6 @@
 export class Activation {
+    public static empty = (): Activation => new Activation(0, 0, 0);
+
     private _score: number;
     constructor(initial: number, public readonly max: number, public readonly activation: number) {
         this._score = initial;

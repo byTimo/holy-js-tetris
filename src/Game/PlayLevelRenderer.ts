@@ -6,6 +6,7 @@ import { CodeLine } from "./Objects/CodeLine";
 import { MathHelper } from "../Helpers/MathHelpers";
 import { PissingRag } from "./Objects/PissingRag";
 import { SaveLine } from "./Objects/SaveLine";
+import { TaskSummary } from "./Objects/TaskSummary";
 
 export class PlayLevelRenderer implements RenderMiddleware {
     public render(ctx: CanvasRenderingContext2D, context: GameContext) {
@@ -38,6 +39,7 @@ export class PlayLevelRenderer implements RenderMiddleware {
 
         this.renderRag(ctx, level.rag);
         this.renderEnd(ctx, level.end);
+        this.renderTaskSummary(ctx, level.taskSummary);
     }
 
     private renderLine = (ctx: CanvasRenderingContext2D, line: CodeLine) => {
@@ -70,5 +72,16 @@ export class PlayLevelRenderer implements RenderMiddleware {
         const innerScale = { width: weight * scale.width, height: weight * scale.height };
         const innerStart = MathHelper.start(end.position, innerScale);
         RenderHelper.renderFillRect(ctx, innerStart, innerScale, "green");
+    }
+
+    private renderTaskSummary = (ctx: CanvasRenderingContext2D, summary: TaskSummary) => {
+        const part = summary.scale.height / 6;
+        const start = MathHelper.start(summary.position, summary.scale);
+        RenderHelper.renderText(ctx, "arguments:", { x: start.x, y: start.y + part / 2 }, "white", 14, "start");
+        RenderHelper.renderText(ctx, JSON.stringify(summary.task.args), { x: start.x, y: start.y + 1.5 * part }, "white", 14, "start");
+        RenderHelper.renderText(ctx, "expected:", { x: start.x, y: start.y + 2.5 * part }, "white", 14, "start");
+        RenderHelper.renderText(ctx, JSON.stringify(summary.task.result), { x: start.x, y: start.y + 3.5 * part }, "white", 14, "start");
+        RenderHelper.renderText(ctx, "previous:", { x: start.x, y: start.y + 4.5 * part }, "white", 14, "start");
+        RenderHelper.renderText(ctx, JSON.stringify(summary.lastResult), { x: start.x, y: start.y + 5.5 * part }, "white", 14, "start");
     }
 }
