@@ -4,6 +4,7 @@ import { RenderHelper } from "./Helpers/RenderHelper";
 import { PlayLevelRenderer } from "./Game/PlayLevelRenderer";
 import { PlayLevel } from "./Game/Levels/PlayLevel";
 import { StartLevelRenderer } from "./Game/StartLevelRenderer";
+import { ResultLevelRenderer } from "./Game/ResultLevelRenderer";
 
 const renderVideo = true;
 
@@ -15,6 +16,7 @@ export class GameRenderer {
         this.middlewares = [
             new StartLevelRenderer(),
             new PlayLevelRenderer(),
+            new ResultLevelRenderer(),
             new HandRenderer()
         ]
     }

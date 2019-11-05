@@ -79,6 +79,10 @@ export class MathHelper {
         return Math.sqrt(dx * dx + dy * dy);
     }
 
+    static add({ x: x1, y: y1 }: Point, { x: x2, y: y2 }: Point): Point {
+        return { x: x1 + x2, y: y1 + y2 };
+    }
+
     static random(min: number, max: number): number {
         min = Math.ceil(min);
         max = Math.floor(max);

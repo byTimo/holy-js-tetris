@@ -8,6 +8,8 @@ import { PissingRag } from "./Objects/PissingRag";
 import { SaveLine } from "./Objects/SaveLine";
 import { TaskSummary } from "./Objects/TaskSummary";
 
+const playChar = "\u25B6";
+
 export class PlayLevelRenderer implements RenderMiddleware {
     public render(ctx: CanvasRenderingContext2D, context: GameContext) {
         if (!(context.level instanceof PlayLevel)) {
@@ -67,11 +69,12 @@ export class PlayLevelRenderer implements RenderMiddleware {
 
     private renderEnd = (ctx: CanvasRenderingContext2D, end: TextButton) => {
         const { start, scale } = end.collider;
-        RenderHelper.renderFillRect(ctx, start, scale, "#00ff00");
+        RenderHelper.renderStrokeRect(ctx, start, scale, "green");
         const weight = end.active.activationPersentage;
         const innerScale = { width: weight * scale.width, height: weight * scale.height };
         const innerStart = MathHelper.start(end.position, innerScale);
         RenderHelper.renderFillRect(ctx, innerStart, innerScale, "green");
+        RenderHelper.renderText(ctx, `${playChar} tries: ${end.text}`, end.position, "white")
     }
 
     private renderTaskSummary = (ctx: CanvasRenderingContext2D, summary: TaskSummary) => {

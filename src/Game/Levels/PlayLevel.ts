@@ -12,6 +12,7 @@ import { tasks } from "../../Tasks";
 import { Label } from "../Objects/Label";
 import { ObjectHelper } from "../../Helpers/ObjectHelpers";
 import { TaskSummary } from "../Objects/TaskSummary";
+import { ResultLevel } from "./ResultLevel";
 
 const littlePartInLine = 5;
 const centerLine = 3;
@@ -30,15 +31,16 @@ export class PlayLevel extends Level {
     public taskSummary: TaskSummary;
 
     private taskLines: CodeTaskLine[] = [];
+    private code: string = "";
 
     constructor(private scale: Scale) {
         super();
         this.task = tasks["js"][MathHelper.random(0, tasks["js"].length)];
         const part = scale.height / (12 * littlePartInLine + 13)
         const lineScale = { width: scale.width * lineWidthMultiplyer, height: part * littlePartInLine };
-        this.funcTitleLabel = new Label(this.task.title, { x: scale.width / 2, y: part * centerLine + part }, lineScale);
-        this.funcCloseLabel = new Label("}", { x: scale.width / 2, y: scale.height - part - part * (centerLine - 1) }, lineScale)
-        this.savedLines = ArrayHelper.range(1, 10).map((x) => new SaveLine({ x: scale.width / 2, y: part + x * (part + lineScale.height) + centerLine * part }, lineScale));
+        this.funcTitleLabel = new Label(this.task.title, { x: scale.width * 0.6, y: part * centerLine + part }, lineScale);
+        this.funcCloseLabel = new Label("}", { x: scale.width * 0.6, y: scale.height - part - part * (centerLine - 1) }, lineScale)
+        this.savedLines = ArrayHelper.range(1, 10).map((x) => new SaveLine({ x: scale.width * 0.6, y: part + x * (part + lineScale.height) + centerLine * part }, lineScale));
         const ragScale = MathHelper.scale(scale, 0.03);
         this.rag = new PissingRag({ x: scale.width - ragScale.width - 10, y: ragScale.width + 10 }, ragScale);
         const endScale = MathHelper.scale(scale, 0.1);
@@ -48,21 +50,28 @@ export class PlayLevel extends Level {
     }
 
     invoke = (context: GameContext): Level => {
+        if (this.tries <= 0) {
+            return new ResultLevel(this.scale, false, this.task, this.code, this.taskSummary.lastResult);
+        }
+
         if (this.end.active.active) {
-            const [end, result] = this.tryExcuteTask();
+            const [end, result, code] = this.tryExcuteTask();
             if (end) {
-                return new StartLevel(this.scale);
+                return new ResultLevel(this.scale, true, this.task, code, result);
             } else {
+                this.tries = this.tries - 1;
+                const endScale = MathHelper.scale(this.scale, 0.1);
+                this.end = new TextButton(`${this.tries}/3`, { x: this.scale.width - endScale.width / 2 - 10, y: this.scale.height - endScale.height / 2 - 10 }, endScale)
                 this.end.active.drop();
                 this.taskSummary.lastResult = result;
+                this.code = code;
             }
         }
 
 
         if (this.lines.length === 0 || this.lines[0].position.y > 50) {
-            const part = this.scale.height / 12 / 11;
-            const scale = { width: this.scale.width * 0.25, height: part * 5 };
-            const line = new CodeLine(this.nextText(), { x: scale.width / 2 + 10, y: scale.height / 2 }, scale);
+            const scale = { width: this.scale.width * 0.25, height: this.scale.height * 0.05 };
+            const line = new CodeLine(this.nextText(), { x: scale.width / 2 + 10, y: scale.height / 2 - this.scale.height * 0.02 }, scale);
             this.lines.unshift(line);
         }
 
@@ -76,7 +85,7 @@ export class PlayLevel extends Level {
         return this;
     }
 
-    private tryExcuteTask = (): [boolean, any] => {
+    private tryExcuteTask = (): [boolean, any, string] => {
         const codes = this.savedLines.filter(x => x.line != null).map(x => x.line!.line.code);
         const code = [this.task.header, ...codes, "}"].join("\n");
         try {
@@ -86,13 +95,10 @@ export class PlayLevel extends Level {
                 throw new Error("No func")
             };
             const actualResult = func.apply(null, this.task.args);
-            return [ObjectHelper.isEquals(actualResult, this.task.result), actualResult];
+            return [ObjectHelper.isEquals(actualResult, this.task.result), actualResult, code];
 
         } catch (e) {
-            this.tries--;
-            const endScale = MathHelper.scale(this.scale, 0.1);
-            this.end = new TextButton(`${this.tries}/3`, { x: this.scale.width - endScale.width / 2 - 10, y: this.scale.height - endScale.height / 2 - 10 }, endScale)
-            return [false, "error"];
+            return [false, "error", code];
         }
     }
 
