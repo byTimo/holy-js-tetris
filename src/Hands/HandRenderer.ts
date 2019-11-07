@@ -2,7 +2,16 @@ import { GameContext } from "../GameTypes";
 import { HandGameController, HandDetection } from "./Types";
 import { RenderHelper } from "../Helpers/RenderHelper";
 
+const pattern = /rect/;
+
+function hasPatternInHash() {
+    const hash = window.location.hash;
+    const match = pattern.exec(hash);
+    return !!match;
+}
+
 export class HandRenderer {
+    private rect: boolean = hasPatternInHash();
     render = (ctx: CanvasRenderingContext2D, context: GameContext) => {
         for (const controller of context.controllers) {
             if (controller instanceof HandGameController) {
@@ -20,9 +29,14 @@ export class HandRenderer {
                 const green = 255 * detection.score;
                 const c = `rgb(${red}, ${green}, 0)`;
                 RenderHelper.renderFillCircle(ctx, detection.position, 2, c);
-                // RenderHelper.renderStrokeRect(ctx, detection.start, detection.scale, c);
-                // RenderHelper.renderText(ctx, detection.score.toString(), detection.start, c, 50);
+                if (this.rect) {
+                    RenderHelper.renderStrokeRect(ctx, detection.start, detection.scale, c);
+                }
             }
         }
+    }
+
+    private handleHashChanged = () => {
+        this.rect = hasPatternInHash();
     }
 }

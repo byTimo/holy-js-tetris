@@ -17,6 +17,7 @@ declare module "handtrackjs" {
         maxNumBoxes?: number;
         iouThreshold?: number;
         scoreThreshold?: number;
+        outputStride?: number;
     }
 
     export function load(params?: ModelParams): Promise<Model>;
