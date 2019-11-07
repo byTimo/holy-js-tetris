@@ -102,6 +102,189 @@ export const jsTask: CodeTask[] = [{
         text: "a = 0;",
         code: "a = 0;"
     }]
+}, {
+    title: "function min(a) {",
+    header: "window.func = function(a) {",
+    args: [[5, 4, 10, 40, 0]],
+    result: 0,
+    lines: [{
+        text: "var b = Number.MAX_VALUE;",
+        code: "var b = Number.MAX_VALUE;"
+    }, {
+        text: "var c = Number.MAX_VALUE;",
+        code: "var c = Number.MAX_VALUE;"
+    }, {
+        text: "var b = 1;",
+        code: "var b = 1;"
+    }, {
+        text: "var с = 1;",
+        code: "var с = 1;"
+    }, {
+        text: "for(var i = 0; i < a.length; i++) {",
+        code: "for(var i = 0; i < a.length; i++) {"
+    }, {
+        text: "c = 0;",
+        code: "c = 0;"
+    }, {
+        text: "b = a[i];",
+        code: "b = a[i];"
+    }, {
+        text: "b = b > a[i] ? b : a[i];",
+        code: "b = b > a[i] ? b : a[i];"
+    }, {
+        text: "c = c > a[i] ? c : a[i];",
+        code: "c = c > a[i] ? c : a[i];"
+    }, {
+        text: "c = c <= a[i] ? c : a[i];",
+        code: "c = c <= a[i] ? c : a[i];"
+    }, {
+        text: "b = b <= a[i] ? b : a[i];",
+        code: "b = b <= a[i] ? b : a[i];"
+    }, {
+        text: "c = a[i];",
+        code: "c = a[i];"
+    }, {
+        text: "if(b > a[i]) {",
+        code: "if(b > a[i]) {"
+    }, {
+        text: "if(b <= a[i]) {",
+        code: "if(b <= a[i]) {"
+    }, {
+        text: "if(c > a[i]) {",
+        code: "if(c > a[i]) {"
+    }, {
+        text: "if(c <= a[i]) {",
+        code: "if(c <= a[i]) {"
+    }, {
+        text: "}",
+        code: "}"
+    }, {
+        text: "}",
+        code: "}"
+    }, {
+        text: "return c;",
+        code: "return c;"
+    }, {
+        text: "return b;",
+        code: "return b;"
+    }, {
+        text: "return a[i];",
+        code: "return a[i];"
+    },]
+}, {
+    title: "function count(a) {",
+    header: "window.func = function(a) {",
+    args: [[1, 2, 5, 6, 10, -12, 3]],
+    result: 7,
+    lines: [{
+        text: "var b = 0;",
+        code: "var b = 0;"
+    }, {
+        text: "var c = 0;",
+        code: "var c = 0;"
+    }, {
+        text: "var c = 1;",
+        code: "var c = 1;"
+    }, {
+        text: "var b = 1;",
+        code: "var b = 1;"
+    }, {
+        text: "return b;",
+        code: "return b;"
+    }, {
+        text: "return c;",
+        code: "return c;"
+    }, {
+        text: "for(var i = 0; i < a.length; i++) {",
+        code: "for(var i = 0; i < a.length; i++) {"
+    }, {
+        text: "}",
+        code: "}"
+    }, {
+        text: "c++;",
+        code: "c++;"
+    }, {
+        text: "c = c + 1;",
+        code: "c = c + 1;"
+    }, {
+        text: "b = b + 1;",
+        code: "b = b + 1;"
+    }, {
+        text: "return b;",
+        code: "return b;"
+    }, {
+        text: "return c;",
+        code: "return c;"
+    },]
+}, {
+    title: "function max(a) {",
+    header: "window.func = function(a) {",
+    args: [[-1, -10, 0, -100]],
+    result: 0,
+    lines: [{
+        text: "var b = Number.MIN_VALUE;",
+        code: "var b = Number.MIN_VALUE;"
+    }, {
+        text: "var c = Number.MIN_VALUE;",
+        code: "var c = Number.MIN_VALUE;"
+    }, {
+        text: "var b = 1;",
+        code: "var b = 1;"
+    }, {
+        text: "var с = 1;",
+        code: "var с = 1;"
+    }, {
+        text: "for(var i = 0; i < a.length; i++) {",
+        code: "for(var i = 0; i < a.length; i++) {"
+    }, {
+        text: "c = 0;",
+        code: "c = 0;"
+    }, {
+        text: "b = a[i];",
+        code: "b = a[i];"
+    }, {
+        text: "b = b > a[i] ? b : a[i];",
+        code: "b = b > a[i] ? b : a[i];"
+    }, {
+        text: "c = c > a[i] ? c : a[i];",
+        code: "c = c > a[i] ? c : a[i];"
+    }, {
+        text: "c = c <= a[i] ? c : a[i];",
+        code: "c = c <= a[i] ? c : a[i];"
+    }, {
+        text: "b = b <= a[i] ? b : a[i];",
+        code: "b = b <= a[i] ? b : a[i];"
+    }, {
+        text: "c = a[i];",
+        code: "c = a[i];"
+    }, {
+        text: "if(b > a[i]) {",
+        code: "if(b > a[i]) {"
+    }, {
+        text: "if(b <= a[i]) {",
+        code: "if(b <= a[i]) {"
+    }, {
+        text: "if(c > a[i]) {",
+        code: "if(c > a[i]) {"
+    }, {
+        text: "if(c <= a[i]) {",
+        code: "if(c <= a[i]) {"
+    }, {
+        text: "}",
+        code: "}"
+    }, {
+        text: "}",
+        code: "}"
+    }, {
+        text: "return c;",
+        code: "return c;"
+    }, {
+        text: "return b;",
+        code: "return b;"
+    }, {
+        text: "return a[i];",
+        code: "return a[i];"
+    },]
 }]
 
 // [{
