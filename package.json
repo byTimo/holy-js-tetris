@@ -30,7 +30,7 @@
   "dependencies": {
     "@tensorflow/tfjs-converter": "1.2.11",
     "@tensorflow/tfjs": "1.2.11",
-    "express": "4.17.1",
+    "express": "4.17.3",
     "handtrackjs": "0.0.13",
     "rimraf": "3.0.0"
   }
